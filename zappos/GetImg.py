@@ -8,6 +8,9 @@ from urllib.request import urlopen
 import pymysql
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import platform
+
+print(platform.platform())
 
 browserPath = 'C:\\Program Files (x86)\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe'
 outputDir = 'C:\\Users\\menShoes'
