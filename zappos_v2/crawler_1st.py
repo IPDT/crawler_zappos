@@ -8,7 +8,10 @@ import pymysql
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
-browserPath = '/Users/gbzhu/software/phantomjs-2.1.1-macosx/bin/phantomjs'  # 浏览器的地址
+# for mac
+# browserPath = '/Users/gbzhu/software/phantomjs-2.1.1-macosx/bin/phantomjs'  # 浏览器的地址
+# for windows
+browserPath = 'C:\\Program Files (x86)\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe'  # 浏览器的地址
 driver = webdriver.PhantomJS(executable_path=browserPath)  # 加载浏览器
 parser = 'html5lib'  # 解析器
 
@@ -25,7 +28,12 @@ homepage_dict = {'Sandals': 'http://www.zappos.com/women-sandals/CK_XARC51wHAAQE
 all_tag_list = ['Brand']
 
 # db information
-db = pymysql.connect(host="localhost", user="root", password="gbzhuroot", database="zappos_v2", use_unicode=True, charset='utf8')
+# for mac
+# db = pymysql.connect(host="localhost", user="root", password="root", database="zappos_v2", use_unicode=True,
+#                      charset='utf8')
+# for windows
+db = pymysql.connect(host="localhost", user="root", passwd="root", db="zappos_v2", use_unicode=True,
+                     charset='utf8')
 cursor = db.cursor()
 
 # table information
