@@ -5,13 +5,13 @@
 
 """
 
-from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, parser, tag_info_table, id_info_table
-
-from urllib import request
-from urllib.request import HTTPError
-from io import BytesIO
 import gzip
 import os
+from io import BytesIO
+from urllib import request
+from urllib.request import HTTPError
+
+from crawler_1st import BeautifulSoup, cursor, db, driver, id_info_table
 
 headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
            'Accept-Encoding': 'gzip, deflate',
@@ -68,8 +68,12 @@ def third_crawler_img(sql_row: tuple):
 
         # for mac
         # output_dir = '/Users/gbzhu/data/sap_data/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
+
         # for windows
-        output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'angle-' + angle_index + '//'
+        # output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'angle-' + angle_index + '//'
+
+        # linux
+        output_dir = '/home/I342202/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         img_name = output_dir + str(style_id) + '.jpg'
@@ -86,7 +90,7 @@ def third_crawler_img(sql_row: tuple):
 
 
 if __name__ == '__main__':
-    sql = "select style_id,product_id,category,brand,url from " + id_info_table + " where isdownload=0"
+    sql = "select style_id,product_id,category,brand,url from " + id_info_table + " where isdownload=0 order by rowid desc"
     cursor.execute(sql)
     result = cursor.fetchall()
     for row in result:
