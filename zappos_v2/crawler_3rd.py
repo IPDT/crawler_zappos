@@ -21,6 +21,8 @@ headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;
            'Upgrade-Insecure-Requests': '1',
            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:54.0) Gecko/20100101 Firefox/54.0'}
 
+angles_list = ['angle-p', 'angle-1', 'angle-2', 'angle-3', 'angle-4', 'angle-5', 'angle-6']
+
 
 def third_crawler_img(sql_row: tuple):
     style_id, product_id, category, brand, url = sql_row[0], sql_row[1], sql_row[2], sql_row[3], sql_row[4]
@@ -40,12 +42,32 @@ def third_crawler_img(sql_row: tuple):
         driver.get(url)
         bs_obj = BeautifulSoup(driver.page_source, 'lxml')
     a_s = bs_obj.find_all(name='a', class_='_1B_yd')
+    if len(a_s) == 0:
+        flag = 'p'
+        for angle in angles_list:
+            a_ = bs_obj.find(name='a', id=angle)
+            a_s.append(a_)
+    else:
+        flag = '-p'
+    if len(a_s) == 0:
+        print("don't find pictures (not p and -p)")
+
+        sql = "update " + id_info_table + " set isdownload=2 where style_id=" + str(style_id)
+        cursor.execute(sql)
+        db.commit()
+        return None
     for a in a_s:
-        angle_index = a['data-index']
+        if flag == '-p':
+            angle_index = a['data-index']
+            img_url = a['href']
+        else:
+            angle_index = a['data-angle']
+            img_url = 'https://luxury.zappos.com' + a['href']
+
         print('angle: ' + angle_index)
-        img_url = a['href']
+
         # for mac
-        output_dir = '/Users/gbzhu/data/sap_data/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
+        # output_dir = '/Users/gbzhu/data/sap_data/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
         # for windows
         output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'angle-' + angle_index + '//'
         if not os.path.exists(output_dir):
@@ -58,6 +80,9 @@ def third_crawler_img(sql_row: tuple):
             continue
         else:
             request.urlretrieve(img_url, img_name)
+    sql = "update " + id_info_table + " set isdownload=1 where style_id=" + str(style_id)
+    cursor.execute(sql)
+    db.commit()
 
 
 if __name__ == '__main__':
@@ -66,8 +91,5 @@ if __name__ == '__main__':
     result = cursor.fetchall()
     for row in result:
         third_crawler_img(sql_row=row)
-        sql = "update " + id_info_table + " set isdownload=1 where style_id=" + str(row[0])
-        cursor.execute(sql)
-        db.commit()
     cursor.close()
     db.close()
