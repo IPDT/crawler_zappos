@@ -11,7 +11,7 @@ from io import BytesIO
 from urllib import request
 from urllib.request import HTTPError
 
-from crawler_1st import BeautifulSoup, cursor, db, driver, id_info_table
+from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, id_info_table
 
 headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
            'Accept-Encoding': 'gzip, deflate',
