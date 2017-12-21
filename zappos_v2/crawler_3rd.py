@@ -8,6 +8,7 @@
 from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, parser, tag_info_table, id_info_table
 
 from urllib import request
+from urllib.request import HTTPError
 from io import BytesIO
 import gzip
 import os
@@ -26,14 +27,18 @@ def third_crawler_img(sql_row: tuple):
 
     print(category + '->' + brand + ' : ' + str(style_id))
 
-    # 压缩传输
-    req = request.Request(url=url, headers=headers)
-    response = request.urlopen(url=req)
-    html = response.read()
-    compressed_stream = BytesIO(html)
-    gzipper = gzip.GzipFile(fileobj=compressed_stream)
-    data = gzipper.read()
-    bs_obj = BeautifulSoup(data, 'lxml')
+    try:
+        # 压缩传输
+        req = request.Request(url=url, headers=headers)
+        response = request.urlopen(url=req)
+        html = response.read()
+        compressed_stream = BytesIO(html)
+        gzipper = gzip.GzipFile(fileobj=compressed_stream)
+        data = gzipper.read()
+        bs_obj = BeautifulSoup(data, 'lxml')
+    except HTTPError:
+        driver.get(url)
+        bs_obj = BeautifulSoup(driver.page_source, 'lxml')
     a_s = bs_obj.find_all(name='a', class_='_1B_yd')
     for a in a_s:
         angle_index = a['data-index']
