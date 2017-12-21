@@ -37,14 +37,19 @@ def third_crawler_img(sql_row: tuple):
     a_s = bs_obj.find_all(name='a', class_='_1B_yd')
     for a in a_s:
         angle_index = a['data-index']
-        print(angle_index)
+        print('angle: ' + angle_index)
         img_url = a['href']
         # for mac
         output_dir = '/Users/gbzhu/data/sap_data/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
+        # for windows
+        output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'angle-' + angle_index + '//'
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         img_name = output_dir + str(style_id) + '.jpg'
         if os.path.exists(img_name):
+
+            print('exist')
+
             continue
         else:
             request.urlretrieve(img_url, img_name)
@@ -56,6 +61,8 @@ if __name__ == '__main__':
     result = cursor.fetchall()
     for row in result:
         third_crawler_img(sql_row=row)
-        sql = "update " + id_info_table + " set isdownload=1 where style_id=" + row[0]
+        sql = "update " + id_info_table + " set isdownload=1 where style_id=" + str(row[0])
+        cursor.execute(sql)
+        db.commit()
     cursor.close()
     db.close()
