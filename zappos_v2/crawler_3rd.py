@@ -9,7 +9,6 @@ import gzip
 import os
 from io import BytesIO
 from urllib import request
-from urllib.error import ContentTooShortError
 from urllib.request import HTTPError
 
 from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, id_info_table
@@ -69,8 +68,12 @@ def third_crawler_img(sql_row: tuple):
 
         # for mac
         # output_dir = '/Users/gbzhu/data/sap_data/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
+
         # for windows
-        output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'angle-' + angle_index + '//'
+        # output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'angle-' + angle_index + '//'
+
+        # linux
+        output_dir = '/home/I342202/picture_v2/' + category + '/' + brand + '/' + 'angle-' + angle_index + '/'
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         img_name = output_dir + str(style_id) + '.jpg'
@@ -80,17 +83,14 @@ def third_crawler_img(sql_row: tuple):
 
             continue
         else:
-            try:
-                request.urlretrieve(img_url, img_name)
-            except ContentTooShortError:
-                return None
+            request.urlretrieve(img_url, img_name)
     sql = "update " + id_info_table + " set isdownload=1 where style_id=" + str(style_id)
     cursor.execute(sql)
     db.commit()
 
 
 if __name__ == '__main__':
-    sql = "select style_id,product_id,category,brand,url from " + id_info_table + " where isdownload=0"
+    sql = "select style_id,product_id,category,brand,url from " + id_info_table + " where isdownload=0 order by rowid desc"
     cursor.execute(sql)
     result = cursor.fetchall()
     for row in result:
