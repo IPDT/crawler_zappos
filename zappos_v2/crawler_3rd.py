@@ -5,13 +5,14 @@
 
 """
 
-from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, parser, tag_info_table, id_info_table
-
-from urllib import request
-from urllib.request import HTTPError
-from io import BytesIO
 import gzip
 import os
+from io import BytesIO
+from urllib import request
+from urllib.error import ContentTooShortError
+from urllib.request import HTTPError
+
+from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, id_info_table
 
 headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
            'Accept-Encoding': 'gzip, deflate',
@@ -79,7 +80,10 @@ def third_crawler_img(sql_row: tuple):
 
             continue
         else:
-            request.urlretrieve(img_url, img_name)
+            try:
+                request.urlretrieve(img_url, img_name)
+            except ContentTooShortError:
+                return None
     sql = "update " + id_info_table + " set isdownload=1 where style_id=" + str(style_id)
     cursor.execute(sql)
     db.commit()

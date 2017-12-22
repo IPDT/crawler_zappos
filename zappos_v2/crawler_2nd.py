@@ -4,9 +4,11 @@
     auther : wiki
 
 """
-import pymysql
-from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, parser, tag_info_table, id_info_table
 import re
+
+import pymysql
+
+from zappos_v2.crawler_1st import BeautifulSoup, cursor, db, driver, parser, tag_info_table, id_info_table
 
 
 def second_crawler(brand_info, url):
@@ -54,10 +56,7 @@ def second_crawler(brand_info, url):
                 a_list = a_list + child_a_list
             except Exception:
                 continue
-            except RuntimeError:
-                continue
-            except ReferenceError:
-                continue
+
     for a in a_list:
         style_id = a['data-style-id']
         product_id = a['data-product-id']
