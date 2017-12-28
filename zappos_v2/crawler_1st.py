@@ -9,13 +9,13 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 
 # for mac
-# browserPath = '/Users/gbzhu/software/phantomjs-2.1.1-macosx/bin/phantomjs'  # 浏览器的地址
+browserPath = '/Users/gbzhu/software/phantomjs-2.1.1-macosx/bin/phantomjs'  # 浏览器的地址
 
 # for windows
 # browserPath = 'C:\\Program Files (x86)\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe'  # 浏览器的地址
 
 # for linux
-browserPath = '/usr/lib/phantomjs/phantomjs'
+# browserPath = '/usr/lib/phantomjs/phantomjs'
 
 driver = webdriver.PhantomJS(executable_path=browserPath)  # 加载浏览器
 parser = 'html5lib'  # 解析器
@@ -35,16 +35,16 @@ all_tag_list = ['Brand']
 # db information
 
 # for mac
-# db = pymysql.connect(host="localhost", user="root", password="gbzhuroot", database="zappos_v2", use_unicode=True,
-#                      charset='utf8')
+db = pymysql.connect(host="localhost", user="root", password="gbzhuroot", database="zappos_v2", use_unicode=True,
+                     charset='utf8')
 
 # for windows
 # db = pymysql.connect(host="localhost", user="root", passwd="root", db="zappos_v2", use_unicode=True,
 #                      charset='utf8')
 
 # for linux
-db = pymysql.connect(host="localhost", user="root", passwd="shenqinglengmo", db="zappos_v2", use_unicode=True,
-                     charset='utf8')
+# db = pymysql.connect(host="localhost", user="root", passwd="shenqinglengmo", db="zappos_v2", use_unicode=True,
+#                      charset='utf8')
 
 cursor = db.cursor()
 
