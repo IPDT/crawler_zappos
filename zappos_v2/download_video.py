@@ -17,13 +17,13 @@ def download_video(db_row: tuple):
 
     replace_chars = product_id[0] + '/' + product_id[1] + '/' + product_id[2] + '/' + product_id
     # for mac
-    output_dir = '/Users/gbzhu/data/sap_data/picture_v2/' + category + '/' + brand + '/' + 'video' + '/'
+    output_dir = '/Users/gbzhu/data/sap_data/video_v2/' + category + '/' + brand + '/' + 'video' + '/'
 
     # for windows
-    # output_dir = 'C://Users//I342202//Desktop//picture_v2//' + category + '//' + brand + '//' + 'video' + '//'
+    # output_dir = 'C://Users//I342202//Desktop//video_v2//' + category + '//' + brand + '//' + 'video' + '//'
 
     # linux
-    # output_dir = '/home/I342202/picture_v2/' + category + '/' + brand + '/' + 'video' + '/'
+    # output_dir = '/home/I342202/video_v2/' + category + '/' + brand + '/' + 'video' + '/'
 
     url = pre_url.replace('replace_chars', replace_chars)
 
