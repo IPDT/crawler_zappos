@@ -11,9 +11,9 @@ from zappos_v2.crawler_1st import cursor, db, id_info_table
 
 def download_video(db_row: tuple):
     pre_url = 'https://www.zappos.com/media/video/replace_chars.mp4'
-    style_id, product_id, category, brand = str(db_row[0]), str(db_row[1]), db_row[2], db_row[3]
+    product_id, category, brand = str(db_row[0]), db_row[1], db_row[2]
 
-    print(category + ' - ' + brand + ' - ' + style_id)
+    print(category + ' - ' + brand + ' - ' + product_id)
 
     replace_chars = product_id[0] + '/' + product_id[1] + '/' + product_id[2] + '/' + product_id
     # for mac
@@ -29,7 +29,7 @@ def download_video(db_row: tuple):
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    video_path = output_dir + style_id + '.mp4'
+    video_path = output_dir + product_id + '.mp4'
     if os.path.exists(video_path):
         print('exist')
     else:
@@ -37,23 +37,23 @@ def download_video(db_row: tuple):
             request.urlretrieve(url, video_path)
         except ContentTooShortError:
             print('this video interrupted')
-            sql = "update " + id_info_table + " set video_tag=2 where style_id=" + style_id
+            sql = "update " + id_info_table + " set video_tag=2 where product_id=" + product_id
             cursor.execute(sql)
             db.commit()
             return None
         except HTTPError:
             print('url 404')
-            sql = "update " + id_info_table + " set video_tag=404 where style_id=" + style_id
+            sql = "update " + id_info_table + " set video_tag=404 where product_id=" + product_id
             cursor.execute(sql)
             db.commit()
             return None
-        sql = "update " + id_info_table + " set video_tag=1 where style_id=" + style_id
+        sql = "update " + id_info_table + " set video_tag=1 where product_id=" + product_id
         cursor.execute(sql)
         db.commit()
 
 
 if __name__ == '__main__':
-    sql = "select style_id,product_id,category ,brand from " + id_info_table + " where isdownload=1"
+    sql = "select product_id,category ,brand from " + id_info_table + " where isdownload=1"
     cursor.execute(sql)
     rows = cursor.fetchall()
     for row in rows:
